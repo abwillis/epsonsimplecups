@@ -1,6 +1,4 @@
-VPATH = src:ppd:bin
-
-ppds = EpsonTMT20Simple.ppd.gz
+ppds = EpsonTMT20Simple.ppd
 
 DEFS=
 LIBS=-lcupsimage -lcups
@@ -21,15 +19,16 @@ endef
 define sweep
 @if [ -e bin ]; then echo "rm -f bin/*"; rm -f bin/*; rmdir bin; fi
 @if [ -e install ]; then echo "rm -f install/*"; rm -f install/*; rmdir install; fi
+rm src/*.o
 endef
 
 install/setup: rastertoepsonsimple $(ppds) setup
 	# packaging
 	@if [ -e install ]; then rm -f install/*; rmdir install; fi
 	mkdir install
-	cp bin/rastertoepsonsimple install
-	cp bin/*.ppd.gz install
-	cp bin/setup install
+	cp bin/rastertoepsonsimple.exe install
+	cp bin/*.ppd install
+	cp bin/setup.sh install
 
 .PHONY: install
 install:
@@ -60,23 +59,22 @@ help:
 	# make remove       removes installed files from your system (assumes default install lication) [requires root user permissions]
 	# make clean        deletes all compiles files and their folders
 
-rastertoepsonsimple: rastertoepsonsimple.c bufferedscanlines.o
+rastertoepsonsimple: src/rastertoepsonsimple.c src/bufferedscanlines.o
 	$(dependencies)
 	$(init)
 	# compiling rastertoepsonsimple filter
-	gcc -Wl,-rpath,/usr/lib -Wall -fPIC -O2 $(DEFS) -o bin/rastertoepsonsimple bufferedscanlines.o src/rastertoepsonsimple.c $(LIBS)
+	gcc -Wall -fPIC -O2 $(DEFS) -o bin/rastertoepsonsimple.exe src/bufferedscanlines.c src/rastertoepsonsimple.c $(LIBS)
 
 
-$(ppds): %.ppd.gz: %.ppd
-	# gzip ppd file
-	gzip -c $< >> bin/$@
+$(ppds): ppd/EpsonTMT20Simple.ppd
+	cp $< bin/$@
 
-setup: setup.sh
+setup: src/setup.sh
 	$(dependencies)
 	$(init)
 	# create setup shell script
-	cp src/setup.sh bin/setup
-	chmod +x bin/setup
+	cp src/setup.sh bin/setup.sh
+	chmod +x bin/setup.sh
 
 .PHONY: clean
 clean:
