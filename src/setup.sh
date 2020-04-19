@@ -74,13 +74,13 @@ fi
 
 echo "Copying rastertoepsonsimple filter to $DESTDIR/$FILTERDIR"
 mkdir -p $DESTDIR/$FILTERDIR
-chmod +x rastertoepsonsimple
-cp rastertoepsonsimple $DESTDIR/$FILTERDIR
+chmod +x rastertoepsonsimple.exe
+cp rastertoepsonsimple.exe $DESTDIR/$FILTERDIR
 echo ""
 
 echo "Copying model ppd files to $DESTDIR/$PPDDIR"
 mkdir -p $DESTDIR/$PPDDIR
-cp *.gz $DESTDIR/$PPDDIR
+cp *.ppd $DESTDIR/$PPDDIR
 echo ""
 
 if [ -z $RPMBUILD ]
