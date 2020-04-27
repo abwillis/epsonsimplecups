@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 
     if (argc == 7)
     {
-        if ((fd = open(argv[6], O_RDONLY)) == -1)
+        if ((fd = open(argv[6], O_RDONLY | O_BINARY)) == -1)
         {
             perror("ERROR: Unable to open raster file - ");
             sleep(1);
